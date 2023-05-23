@@ -45,10 +45,7 @@ jobs:
         source "$INIT_ENV"
         source "$ROS_2_ENV"
         apt-get update
-        rosdep update
-        rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
-        ls -la && pwd 
-        cd src/autoware.auto && ls -la
+        cd src/autoware.auto
         sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
