@@ -16,7 +16,7 @@ jobs:
         INIT_ENV: "/home/carma/.base-image/init-env.sh"
         ROS_2_ENV: "/opt/ros/foxy/setup.bash"
         TERM: xterm
-      options: "--user root"
+      options: "--user root carma"
     steps:
     - name: Checkout ${{ github.event.repository.name }}
       uses: actions/checkout@v3.3.0
@@ -45,9 +45,10 @@ jobs:
         source "$INIT_ENV"
         source "$ROS_2_ENV"
         apt-get update
-        sudo rosdep update
+        rosdep update
+        cd src/autoware.auto
+        pwd && ls -la
         sudo rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
-        #cd src/autoware.auto
         sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
