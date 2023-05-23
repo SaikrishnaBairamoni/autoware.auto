@@ -48,6 +48,7 @@ jobs:
         cd src/autoware.auto
         pwd && ls -la
         rosdep update -y 
+        sudo rosdep fix-permissions
         sudo rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
         sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
