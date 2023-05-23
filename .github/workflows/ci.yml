@@ -45,7 +45,6 @@ jobs:
         source "$INIT_ENV"
         source "$ROS_2_ENV"
         apt-get update
-        rosdep update
         cd src/autoware.auto
         pwd && ls -la
         sudo rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
