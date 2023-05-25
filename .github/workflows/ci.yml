@@ -45,7 +45,7 @@ jobs:
         source "$ROS_2_ENV"
         apt-get update
         #rosdep update
-        cd src/autoware.auto
+        #cd src/autoware.auto
         pwd && ls -la
         #rosdep update
         #sudo rosdep fix-permissions
