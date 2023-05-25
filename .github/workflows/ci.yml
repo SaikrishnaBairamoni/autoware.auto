@@ -7,7 +7,6 @@ jobs:
   build:
     defaults:
       run:
-        shell: bash
         working-directory: "/opt/carma/"
     runs-on: ubuntu-latest
     container:
@@ -16,7 +15,7 @@ jobs:
         INIT_ENV: "/home/carma/.base-image/init-env.sh"
         ROS_2_ENV: "/opt/ros/foxy/setup.bash"
         TERM: xterm
-      options: "--user root"
+      options: "--user carma"
     steps:
     - name: Checkout ${{ github.event.repository.name }}
       uses: actions/checkout@v3.3.0
@@ -45,19 +44,19 @@ jobs:
         source "$INIT_ENV"
         source "$ROS_2_ENV"
         apt-get update
-        rosdep update
+        #rosdep update
         cd src/autoware.auto
         pwd && ls -la
-        rosdep update
-        sudo rosdep fix-permissions
-        sudo rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
-        sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        #rosdep update
+        #sudo rosdep fix-permissions
+        #sudo rosdep install --from-paths /opt/carma/src/"${{ github.event.repository.name }}" --ignore-src -y
+        #sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
       run: |
         source "$INIT_ENV"
         source "$ROS_2_ENV"
-        sed -i '/colcon test/ s/$/ --packages-above AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        #sed -i '/colcon test/ s/$/ --packages-above AutowareAuto/src/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run SonarScanner
       uses: usdot-fhwa-stol/actions/sonar-scanner@main
