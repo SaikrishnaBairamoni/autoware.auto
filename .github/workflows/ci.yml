@@ -13,6 +13,7 @@ jobs:
       image: usdotfhwastoldev/carma-base:develop
       env:
         INIT_ENV: "/home/carma/.base-image/init-env.sh"
+        ROS_2_ENV: "/opt/ros/foxy/setup.bash"
         TERM: xterm
       options: "--user root"
     steps:
@@ -30,14 +31,16 @@ jobs:
     - name: Build
       run: |
         source "$INIT_ENV"
+        source "$ROS_2_ENV"
         cd src && ls -la && pwd 
-        sed -i '/colcon build/ s/$/ --packages-up-to src/AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        sed -i '/colcon build/ /$/ --packages-up-to src/AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
       run: |
         source "$INIT_ENV"
-        cd src && ls -la && pwd 
-        sed -i '/colcon test/ s/$/ --packages-above src/AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        source "$ROS_2_ENV"
+        cd src 
+        sed -i '/colcon test/ /$/ --packages-above src/AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -t -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run SonarScanner
       uses: usdot-fhwa-stol/actions/sonar-scanner@main
