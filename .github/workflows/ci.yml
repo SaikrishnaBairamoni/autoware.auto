@@ -20,7 +20,6 @@ jobs:
     - name: Checkout ${{ github.event.repository.name }}
       uses: actions/checkout@v3.3.0
       with:
-        fetch-depth: 0
         path: src/${{ github.event.repository.name }}
     - name: Move source code
       run: mv $GITHUB_WORKSPACE/src /opt/carma/
@@ -32,7 +31,6 @@ jobs:
       run: |
         source "$INIT_ENV"
         source "$ROS_2_ENV"
-        cd src/autoware.auto/ && ls -la && pwd 
         sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
