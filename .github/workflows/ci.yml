@@ -32,8 +32,8 @@ jobs:
       run: |
         source "$INIT_ENV"
         source "$ROS_2_ENV"
-        cd src/autoware.auto/AutowareAuto/src/ && ls -la && pwd 
-        sed -i '/colcon build/ s/$/ --packages-up-to common control drivers mapping perception planning prediction system/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        cd src/autoware.auto/ && ls -la && pwd 
+        sed -i '/colcon build/ s/$/ --packages-up-to AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
       run: |
