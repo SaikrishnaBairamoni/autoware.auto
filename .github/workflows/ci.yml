@@ -33,7 +33,7 @@ jobs:
         source "$INIT_ENV"
         source "$ROS_2_ENV"
         cd src && ls -la && pwd 
-        sed -i '/colcon build/ 's/^\([^;]*;[^;]*;[^;]*\);\([^;]*;[^;]*\);/\1.\2./' autowate.auto/* --packages-up-to src/AutowareAuto/' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
+        sed -i '/colcon build/ s/$/ --packages-up-to autoware.auto /' /home/carma/.ci-image/engineering_tools/code_coverage/make_with_coverage.bash
         make_with_coverage.bash -m -e /opt/carma/ -o ./coverage_reports/gcov
     - name: Run C++ Tests
       run: |
